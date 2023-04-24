@@ -1,1 +1,114 @@
-int numero
+// DOJO NUMERO 1 - DOJO H
+// PRIMERA ENTREGA
+/*
+-----------CONSIGNA PRIMERA ENTREGA----------------------------------
+1- El semáforo tiene que tener 2 leds de cada color como mínimo, en caso de que uno se  rompa. 
+2- Tiene que implementar los tiempos correctos como se detallan a continuación. 3- El verde dura 5 segundos. 
+4- El amarillo dura 3 segundos. 
+5- Rojo dura 5 segundos. 
+6- Tiene que tener señalización para personas no videntes como se detalla a  continuación. (Buzzer o piezo)
+7- Durante el rojo: Tiene que sonar 2 vez por segundo en un tono FUERTE. 
+---------------------------------------------------------------------
+*/
+
+#define LEDSVERDES 12
+#define LEDSAMARILLOS 11
+#define LEDSROJOS 10
+#define TIEMPOVERDE 5000
+#define TIEMPOAMARILLO 3000
+#define TIEMPOROJO 5000
+#define BUZZER 6
+
+//PROTOTIPOS
+void EncenderLed(int led);
+void ApagarLed(int led);
+void EncenderLedPorTiempo(int led, int tiempo);
+void SonarBuzzerDosVecesPorSegundo(int buzzer);
+void EncenderLedRojoYBuzzerDosVecesPorSegundo(int led, int buzzer);
+ 
+//
+void setup()
+{
+  //salidas digitales
+  pinMode(LEDSVERDES, OUTPUT);
+  pinMode(LEDSAMARILLOS, OUTPUT);
+  pinMode(LEDSROJOS, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
+  
+  //monitor serial
+   Serial.begin(9600);
+}
+
+void loop()
+{
+  Serial.println("Se enciende el led verde");
+  EncenderLedPorTiempo(LEDSVERDES,TIEMPOVERDE);
+  Serial.println("Se enciende el led amarillo");
+  EncenderLedPorTiempo(LEDSAMARILLOS,TIEMPOAMARILLO);
+  Serial.println("Se enciende el led rojo y suena el buzzer");
+  EncenderLedRojoYBuzzerDosVecesPorSegundo(LEDSROJOS,BUZZER);
+}
+
+
+//DESARROLLO
+/*
+La funcion prende el led 
+*/
+void EncenderLed(int led)
+{
+  digitalWrite(led,HIGH);
+}
+
+/*
+La funcion apaga el led 
+*/
+void ApagarLed(int led)
+{
+  digitalWrite(led,LOW);
+}
+
+/*
+La funcion prende el led por un determinado tiempo y lo apaga
+*/
+void EncenderLedPorTiempo(int led, int tiempo)
+{
+  EncenderLed(led);
+  delay(tiempo);
+  ApagarLed(led);
+  delay(1000); 
+}
+
+/*
+La funcion hace sonar un buzzer dos veces por segundo, 
+a una frecuencia de 2000
+*/
+void SonarBuzzerDosVecesPorSegundo(int buzzer)
+{
+   tone(buzzer, 2000);
+   delay(250);//frecuencia del tono
+   noTone(buzzer); //apaga el tono
+   delay(250);
+  
+   tone(buzzer, 2000); //frecuencia del tono
+   delay(250); //espera 250ms
+   noTone(buzzer); //apaga el tono
+   delay(250); //espera 750ms
+}
+
+/*
+La funcion enciende el led rojo y al mismo tiempo hace sonar el
+buzzer dos veces por segundo mientras el led está encendido,
+luego el led se apaga
+*/
+void EncenderLedRojoYBuzzerDosVecesPorSegundo(int led, int buzzer)
+{
+  EncenderLed(led);
+  
+  for(int i = 0; i < 5; i++)
+  {
+    SonarBuzzerDosVecesPorSegundo(buzzer);
+  }
+ 
+  ApagarLed(led);
+  delay(1000);
+}
