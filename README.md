@@ -5,7 +5,7 @@
 - Agustín Oliveto
 
 # Proyecto: Dojo Número Uno
-![Tinkercad](./Img/Dojo Número Uno - Dojo H.png)
+![Tinkercad](./Img/DojoNúmeroUno.png)
 
 # Descripción
 Este proyecto tiene como objetivo actualizar los semáforos de la ciudad para un mejor y óptimo funcionamiento.
