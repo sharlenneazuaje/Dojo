@@ -1,0 +1,169 @@
+// DOJO NUMERO 1 - DOJO H
+// SEGUNDA ENTREGA
+/*
+-----------CONSIGNA SEGUNDA ENTREGA----------------------------------
+8-  Durante el amarillo: Tiene que sonar 1 vez por segundo en un tono SUAVE. 
+9- Al cambiar de verde a amarillo debe titilar 3 veces el verde antes de pasar al amarillo
+10- Al cambiar de amarillo a rojo se debe titilar 3 veces el amarillo
+11- Al cambiar de rojo a Amarillo se debe titilar 3 veces el rojo
+12- Al cambiar de amarillo a verde se debe titilar 3 veces el amarillo.
+---------------------------------------------------------------------
+*/
+
+#define LEDVERDE 11
+#define LEDAMARILLO 12
+#define LEDROJO 13
+
+//PROTOTIPOS
+void EndencerApagarLed(int led, int tiempo1, int tiempo2);
+void EncenderLed(int led);
+void ApagarLed(int led, int tiempo);
+void SonarBuzzer(int buzzer, int frecuencia, int tiempo);
+void EncenderLedRojoYBuzzer(int led, int tiempoapagado);
+void EncenderLedAmarilloyBuzzer(int led, int tiempoapagado);
+void Titilar(int led);
+ 
+//VARIABLES GLOBALES
+int tiempo = 5000;
+int boton;
+  
+void setup()
+{
+  pinMode(LEDVERDE, OUTPUT);
+  pinMode(LEDAMARILLO, OUTPUT);
+  pinMode(LEDROJO, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(3, INPUT);
+  Serial.begin(9600);
+  attachInterrupt(digitalPinToInterrupt(3), pulsar, RISING);
+}
+
+
+void loop()
+{
+  Serial.print("Se enciende el led verde");
+  if(boton == HIGH)
+  {
+    EndencerApagarLed(LEDVERDE,10000,1000);
+    Titilar(LEDVERDE);
+    boton = LOW;
+  }
+  else
+  {
+    EndencerApagarLed(LEDVERDE,5000,1000);
+    Titilar(LEDVERDE);
+  }
+  
+  Serial.println("Se enciende el led amarillo y suena el buzzer");
+  EncenderLedAmarilloyBuzzer(LEDAMARILLO, 1000); 
+  Titilar(LEDAMARILLO);
+  Serial.println("Se enciende el led rojo y suena el buzzer");
+  EncenderLedRojoYBuzzer(LEDROJO,1000);
+  Titilar(LEDROJO);
+  Serial.println("Se enciende el led amarillo y suena el buzzer");
+  EncenderLedAmarilloyBuzzer(LEDAMARILLO, 1000); 
+  Titilar(LEDAMARILLO);
+}
+
+
+//DESARROLLO
+/*
+La funcion prende el led por un determinado tiempo y lo apaga
+por un determinado tiempo
+*/
+void EndencerApagarLed(int led, int tiempo1, int tiempo2)
+{
+  digitalWrite(led, HIGH);
+  delay(tiempo1); 
+  digitalWrite(led, LOW);
+  delay(tiempo2); 
+}
+
+/*
+La funcion prende el led 
+*/
+void EncenderLed(int led)
+{
+    digitalWrite(led, HIGH);
+}
+/*
+La funcion apaga el led 
+*/
+void ApagarLed(int led, int tiempo)
+{
+ 	digitalWrite(led, LOW);
+  	delay(tiempo); 
+}
+/*
+La funcion hace sonar un buzzer a una determinada frecuencia
+por un tiempo en particular
+*/
+void SonarBuzzer(int buzzer, int frecuencia, int tiempo)
+{
+  tone(buzzer, frecuencia);
+  delay(tiempo);//frecuencia del tono
+  noTone(buzzer); //apaga el tono
+  delay(tiempo);
+}
+/*
+La funcion enciende el led rojo y el buzzer. El buzzer va a sonar
+a una frecuencia de 4000 dos veces por segundo, durante los 5 segundos
+que el led rojo estará encendido
+*/
+void EncenderLedRojoYBuzzer(int led, int tiempoapagado)
+{
+  EncenderLed(led);
+  for(int i = 0; i < 5; i++)
+  {
+    SonarBuzzer(7,4000,250);
+    SonarBuzzer(7,4000,250); 
+  }
+  ApagarLed(led,tiempoapagado);
+  
+}
+/*
+La funcion enciende el led amarillo y el buzzer. El buzzer va a sonar
+a una frecuencia de 2000 una vez por segundo, durante los 3 segundos
+que el led rojo estará encendido
+*/
+void EncenderLedAmarilloyBuzzer(int led, int tiempoapagado)
+{
+  EncenderLed(led);
+  for(int i=0; i < 3; i++)
+  {
+    SonarBuzzer(7,2000,500);
+  }
+  ApagarLed(led,tiempoapagado);
+}
+/*
+La funcion hace titilar un led tres veces
+*/
+void Titilar(int led)
+{
+  digitalWrite(led, HIGH);
+  delay(500);
+  digitalWrite(led, LOW);
+  delay(500);
+  digitalWrite(led, HIGH);
+  delay(500);
+  digitalWrite(led, LOW);
+  delay(500);
+  digitalWrite(led, HIGH);
+  delay(500);
+  digitalWrite(led, LOW);
+  delay(500);
+}
+
+/*
+La funcion nos permite identificar el estado del boton PULLDOWN
+*/
+void pulsar()
+{
+ boton = digitalRead(3);
+
+  if(boton == HIGH)
+  {
+      boton = 1;
+  }
+
+}
